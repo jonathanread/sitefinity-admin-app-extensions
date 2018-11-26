@@ -15,6 +15,7 @@ class CustomClassesProvider implements EditorConfigProvider {
      * @param editorHost The instance of the editor.
      */
     getToolBarItems(editorHost: any): ToolBarItem[] {
+        debugger;
         return [];
     }
 
@@ -35,7 +36,6 @@ class CustomClassesProvider implements EditorConfigProvider {
      * Kendo UI Editor configuration Overiview documentation -> https://docs.telerik.com/kendo-ui/controls/editors/editor/overview#configuration
      */
     configureEditor(configuration: any) {
-debugger;
         configuration.tools[0] = {name: "formatting", items: [
             {text: "Heading 1", value: "h1"},
             {text: "Heading 2", value: "h2"},
