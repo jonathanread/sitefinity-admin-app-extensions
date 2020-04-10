@@ -8,18 +8,9 @@ import { ValidatorFn } from "@angular/forms";
 export class CustomShortTextSettings extends SettingsBase {
     init(metadata: any) {
         super.init(metadata);
-
-        // set the recommended characters for this field to 20
-        this.recommendedCharacters = 20;
     }
     getValidators(): ValidatorFn[] {
         const baseValidators = super.getValidators();
-
-        // // add an email pattern validator
-        // const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        // const emailValidator = Validators.pattern(emailPattern);
-        // baseValidators.push(emailValidator);
-
         return baseValidators;
     }
 }

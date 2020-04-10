@@ -1,5 +1,9 @@
 import { Component } from "@angular/core";
 import { FieldBase } from "progress-sitefinity-adminapp-sdk/app/api/v1";
+import { HttpClient } from '@angular/common/http';
+import { HTTP_PREFIX } from "progress-sitefinity-adminapp-sdk/app/api/v1";
+import { ActivatedRoute } from "@angular/router";
+
 
 /**
  * The component used to display the field in write mode.
@@ -7,15 +11,28 @@ import { FieldBase } from "progress-sitefinity-adminapp-sdk/app/api/v1";
  */
 @Component({
     templateUrl: "./custom-field-write.component.html",
-    styleUrls: [ "./custom-field-write.component.css" ]
+    styleUrls: []
 })
 export class CustomInputWriteComponent extends FieldBase{
-    public options = [
-        { name: "Option1", value: "option1" },
-        { name: "Option2", value: "option2" }
-    ];
+    public options:any[];
 
     syncValue(value: string) {
         this.writeValue(value);
+    }
+    
+    getOptions(){
+        const routeParams = this.route.snapshot.queryParams;
+        const url = `${HTTP_PREFIX}/sf/system/newsitems` + (routeParams.provider ? `?sf_provider=${routeParams.provider}` : ``);
+
+        this.http.get<any[]>(url,{responseType: 'json'})
+            .subscribe(result => this.options = result["value"]);
+    }
+
+    constructor(
+        private http: HttpClient,
+        private route: ActivatedRoute
+      ) {
+        super();
+        this.getOptions();
     }
 }
