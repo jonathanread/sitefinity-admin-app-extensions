@@ -1,8 +1,7 @@
 import { Component, Inject } from "@angular/core";
-import { FieldBase, SELECTOR_SERVICE, SelectorService } from "progress-sitefinity-adminapp-sdk/app/api/v1";
+import { FieldBase, SELECTOR_SERVICE, SelectorService} from "progress-sitefinity-adminapp-sdk/app/api/v1";
 import { DialogData } from "progress-sitefinity-adminapp-sdk/app/api/v1/selectors/dialog-data";
 import { DialogComponent } from "./dialog.component";
-
 /**
  * The component used to display the field in write mode.
  * One can use inline template & styles OR templateUrl & styleUrls, like here OR mixture of that. See -readonly.component.ts version for the read mode type.
@@ -12,13 +11,22 @@ import { DialogComponent } from "./dialog.component";
     styleUrls: ["./custom-field.css"]
 })
 export class CustomInputWriteComponent extends FieldBase{
+    constructor(@Inject(SELECTOR_SERVICE) private readonly selectorService: SelectorService) {
+        super();
+    }
     public sections:Section[];
-
     get currentValue(): Section[]{
-        if(this.getValue()){
-            return JSON.parse(this.getValue());
+        if(this.sections && this.sections.length > -1){
+            return this.sections;
+        }else if(this.getValue() && !this.sections){
+            this.sections = JSON.parse(this.getValue());
+            return this.sections;
+        }else if(!this.sections){
+            this.sections = [];
         }
-        return [];
+        else{
+            return this.sections;
+        }
     }
     
     editSection(section: Section){
@@ -38,36 +46,29 @@ export class CustomInputWriteComponent extends FieldBase{
             this.sections.splice(index, 1);
         } 
 
-        this.writeValue(JSON.stringify(this.sections));
+        this.writeValue(JSON.stringify(this.currentValue));
     }
 
     addSection(){
         const section:Section = new Section();
-        this.sections.push(section)
+        
+        this.currentValue.push(section);
         this.openDialog(section);
     }
-
-    doSomething(){}
 
     openDialog(section: Section) {
         const dialogData: DialogData = {
             componentData: {
                 type: DialogComponent,
                 properties: {
+                    sections: this.currentValue,
                     section: section
                 }
             },
             commands: []
         };
 
-        this.selectorService.openDialog(dialogData);
-    }
-
-    constructor(
- @Inject(SELECTOR_SERVICE) private readonly selectorService: SelectorService
-      ) {
-        super();
-        this.sections = this.currentValue;
+        this.selectorService.openDialog(dialogData).subscribe(item =>{this.writeValue(JSON.stringify(item.component.sections));});
     }
 }
 

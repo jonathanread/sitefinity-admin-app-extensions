@@ -1,6 +1,6 @@
-<h3>Sections</h3>
-<div *ngIf="sections.length > 0; else elseBlock">
-    <div *ngFor="let section of sections" class="section">
+
+<div *ngIf="currentValue && currentValue.length > 0; else elseBlock">
+    <div *ngFor="let section of currentValue" class="section">
         <div class="headingContainer">
             <strong>{{section.heading}}</strong> - ({{section.items.length}}) Items
             <sf-button icon="remove" (click)="deleteSection(section)">Delete</sf-button>

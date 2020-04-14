@@ -13,14 +13,14 @@ export class DialogComponent {
         private route: ActivatedRoute){
             this.getOptions();
         }
-
     public section: Section;
-    public options: any[];
-    
+    public sections: Section[];
+    options: any[];
+   
     addItem(section:Section){
         if(section){
             const item: Item = new Item();
-            item.contentItem = {Id:null};
+            item.contentItem = {};
             section.items.push(item);
         }
     }
