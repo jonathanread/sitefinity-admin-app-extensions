@@ -1,6 +1,15 @@
-<select (change)="syncValue($event.target.value)">
-    <option value="0">--All--</option>
-    <option *ngFor="let option of options" value={{option.Id}} [selected]="option.Id === this.getValue()">
-        {{option.Title}}
-    </option>
-</select>
+<h3>Sections</h3>
+<div *ngIf="sections.length > 0; else elseBlock">
+    <div *ngFor="let section of sections" class="section">
+        <div class="headingContainer">
+            <strong>{{section.heading}}</strong> - ({{section.items.length}}) Items
+            <sf-button icon="remove" (click)="deleteSection(section)">Delete</sf-button>
+            <sf-button icon="pencil" (click)="editSection(section)">Edit</sf-button>
+        </div>
+    </div>
+    <sf-button icon="plus" title="Add Section" (click)="addSection()">Add Section</sf-button>
+</div>
+<ng-template #elseBlock>
+    No Sections yet ...
+   <sf-button icon="plus" title="Add Section" (click)="addSection()">Add Section</sf-button>
+</ng-template>

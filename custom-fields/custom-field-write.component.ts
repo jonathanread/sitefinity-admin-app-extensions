@@ -1,9 +1,7 @@
-import { Component } from "@angular/core";
-import { FieldBase } from "progress-sitefinity-adminapp-sdk/app/api/v1";
-import { HttpClient } from '@angular/common/http';
-import { HTTP_PREFIX } from "progress-sitefinity-adminapp-sdk/app/api/v1";
-import { ActivatedRoute } from "@angular/router";
-
+import { Component, Inject } from "@angular/core";
+import { FieldBase, SELECTOR_SERVICE, SelectorService } from "progress-sitefinity-adminapp-sdk/app/api/v1";
+import { DialogData } from "progress-sitefinity-adminapp-sdk/app/api/v1/selectors/dialog-data";
+import { DialogComponent } from "./dialog.component";
 
 /**
  * The component used to display the field in write mode.
@@ -11,28 +9,80 @@ import { ActivatedRoute } from "@angular/router";
  */
 @Component({
     templateUrl: "./custom-field-write.component.html",
-    styleUrls: []
+    styleUrls: ["./custom-field.css"]
 })
 export class CustomInputWriteComponent extends FieldBase{
-    public options:any[];
+    public sections:Section[];
 
-    syncValue(value: string) {
-        this.writeValue(value);
+    get currentValue(): Section[]{
+        if(this.getValue()){
+            return JSON.parse(this.getValue());
+        }
+        return [];
     }
     
-    getOptions(){
-        const routeParams = this.route.snapshot.queryParams;
-        const url = `${HTTP_PREFIX}/sf/system/newsitems` + (routeParams.provider ? `?sf_provider=${routeParams.provider}` : ``);
+    editSection(section: Section){
+        if(!section){
+            return null;
+        }
 
-        this.http.get<any[]>(url,{responseType: 'json'})
-            .subscribe(result => this.options = result["value"]);
+        this.openDialog(section);
+    }
+
+    deleteSection(section: Section){
+        if(!section){
+            return null;
+        }
+        const index: number = this.sections.indexOf(section);
+        if (index !== -1) {
+            this.sections.splice(index, 1);
+        } 
+
+        this.writeValue(JSON.stringify(this.sections));
+    }
+
+    addSection(){
+        const section:Section = new Section();
+        this.sections.push(section)
+        this.openDialog(section);
+    }
+
+    doSomething(){}
+
+    openDialog(section: Section) {
+        const dialogData: DialogData = {
+            componentData: {
+                type: DialogComponent,
+                properties: {
+                    section: section
+                }
+            },
+            commands: []
+        };
+
+        this.selectorService.openDialog(dialogData);
     }
 
     constructor(
-        private http: HttpClient,
-        private route: ActivatedRoute
+ @Inject(SELECTOR_SERVICE) private readonly selectorService: SelectorService
       ) {
         super();
-        this.getOptions();
+        this.sections = this.currentValue;
     }
+}
+
+export class Section{
+    constructor(){
+        this.items = [];
+    }
+    id:number;
+    heading: string;
+    items: Item[];
+}
+
+export class Item{
+    id:number;
+    beforeText:string;
+    afterText:string;
+    contentItem: any;
 }

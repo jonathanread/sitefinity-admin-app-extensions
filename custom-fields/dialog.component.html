@@ -1,0 +1,19 @@
+<div class="form-group">
+    <label>
+        Section Heading
+    </label>
+    <input type="text" [(ngModel)]="section.heading" />
+</div>
+<ul>
+    <li *ngFor="let item of section.items">
+        <label>Before Text: </label><input type="text" [(ngModel)]="item.beforeText" />
+        <select [(ngModel)]="item.contentItem">
+            <option value="0">--All--</option>
+            <option *ngFor="let option of options" [value]="item.contentItem" [selected]="option === item.contentItem">
+                {{option.Title}}
+            </option>
+        </select>
+    <label>After Text: </label><input type="text" [(ngModel)]="item.afterText" />
+    </li>
+</ul>
+<sf-button icon="plus" (click)="addItem(section)" title="Add Item">Add Item</sf-button>

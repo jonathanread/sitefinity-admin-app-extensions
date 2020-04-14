@@ -4,17 +4,20 @@ import { CustomInputWriteComponent } from "./custom-field-write.component";
 import { CUSTOM_FIELDS_PROVIDER } from "./custom-fields-provider";
 import { FrameworkModule } from "progress-sitefinity-adminapp-sdk/app/api/v1";
 import { CommonModule } from '@angular/common';
+import { DialogComponent } from './dialog.component';
 
 /**
  * The custom fields module.
  */
 @NgModule({
     declarations: [
-        CustomInputWriteComponent
+        CustomInputWriteComponent,
+        DialogComponent
     ],
     entryComponents: [
         // The components need to be registered here as they are instantiated dynamically.
-        CustomInputWriteComponent
+        CustomInputWriteComponent,
+        DialogComponent
     ],
     providers: [
         CUSTOM_FIELDS_PROVIDER
