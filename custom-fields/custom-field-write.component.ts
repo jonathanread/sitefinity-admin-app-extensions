@@ -1,5 +1,5 @@
 import { Component, Inject } from "@angular/core";
-import { FieldBase, SELECTOR_SERVICE, SelectorService} from "progress-sitefinity-adminapp-sdk/app/api/v1";
+import { FieldBase, SELECTOR_SERVICE, SelectorService, BUTTON_PRIMARY_CATEGORY} from "progress-sitefinity-adminapp-sdk/app/api/v1";
 import { DialogData } from "progress-sitefinity-adminapp-sdk/app/api/v1/selectors/dialog-data";
 import { DialogComponent } from "./dialog.component";
 /**
@@ -51,7 +51,6 @@ export class CustomInputWriteComponent extends FieldBase{
 
     addSection(){
         const section:Section = new Section();
-        
         this.currentValue.push(section);
         this.openDialog(section);
     }
@@ -65,10 +64,21 @@ export class CustomInputWriteComponent extends FieldBase{
                     section: section
                 }
             },
-            commands: []
+            commands: [{name:"Save",title:"Save",ordinal:0,category:BUTTON_PRIMARY_CATEGORY }]
         };
 
-        this.selectorService.openDialog(dialogData).subscribe(item =>{this.writeValue(JSON.stringify(item.component.sections));});
+        this.selectorService.openDialog(dialogData)
+            .subscribe(result => {
+                if(result){
+                    
+                    if(result.data && result.data.data){
+                        this.writeValue(JSON.stringify(result.component.sections));
+                    }else{
+                        console.log(result);
+                        result.component.removeDirtyValues();
+                    }
+                }
+            });
     }
 }
 
@@ -76,14 +86,13 @@ export class Section{
     constructor(){
         this.items = [];
     }
-    id:number;
     heading: string;
     items: Item[];
 }
 
 export class Item{
-    id:number;
     beforeText:string;
     afterText:string;
     contentItem: any;
+    contentItemId: any;
 }

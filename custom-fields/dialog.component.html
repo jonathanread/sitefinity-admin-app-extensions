@@ -4,16 +4,17 @@
     </label>
     <input type="text" [(ngModel)]="section.heading" />
 </div>
-<ul>
+<ul class="sectionItemList">
     <li *ngFor="let item of section.items">
-        <label>Before Text: </label><input type="text" [(ngModel)]="item.beforeText" />
-        <select [(ngModel)]="item.contentItem">
-            <option value="0">--All--</option>
-            <option *ngFor="let option of options" [value]="item.contentItem" [selected]="option === item.contentItem">
+        <label>Before Text: </label><input type="text" [(ngModel)]="item.beforeText" required />
+        <select [(ngModel)]="item.contentItemId" (change)="syncValue(item)" >
+            <option value="">--All--</option>
+            <option *ngFor="let option of options" [value]="option.Id" >
                 {{option.Title}}
             </option>
         </select>
     <label>After Text: </label><input type="text" [(ngModel)]="item.afterText" />
+    <sf-button icon="remove" look="circle small" (click)="removeItem(item)">Delete</sf-button>
     </li>
 </ul>
-<sf-button icon="plus" (click)="addItem(section)" title="Add Item">Add Item</sf-button>
+Add Item<sf-button icon="plus" title="Add Item" (click)="addItem(section)">Add Item</sf-button>

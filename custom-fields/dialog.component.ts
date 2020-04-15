@@ -6,13 +6,14 @@ import { ActivatedRoute } from "@angular/router";
 
 @Component({
     templateUrl: "./dialog.component.html",
-    styleUrls: []
+    styleUrls: ["./dialog-component.css"]
 })
 export class DialogComponent {
     constructor( private http: HttpClient,
         private route: ActivatedRoute){
             this.getOptions();
         }
+
     public section: Section;
     public sections: Section[];
     options: any[];
@@ -20,8 +21,26 @@ export class DialogComponent {
     addItem(section:Section){
         if(section){
             const item: Item = new Item();
-            item.contentItem = {};
+            item.contentItem = {Id:""};           
             section.items.push(item);
+        }
+    }
+
+    syncValue(value:Item){
+        if(value){
+            const option: any = this.options.find(i => i.Id === value.contentItemId);
+            if(option){
+                value.contentItem = option;
+            }
+        }
+    }
+
+    removeItem(item:Item){
+        if(item){
+            const index: number = this.section.items.indexOf(item);
+            if (index !== -1) {
+                this.section.items.splice(index, 1);
+            } 
         }
     }
 

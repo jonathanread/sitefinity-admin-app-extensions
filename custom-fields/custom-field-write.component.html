@@ -1,12 +1,15 @@
 
 <div *ngIf="currentValue && currentValue.length > 0; else elseBlock">
     <div *ngFor="let section of currentValue" class="section">
-        <div class="headingContainer">
-            <strong>{{section.heading}}</strong> - ({{section.items.length}}) Items
-            <sf-button icon="remove" (click)="deleteSection(section)">Delete</sf-button>
-            <sf-button icon="pencil" (click)="editSection(section)">Edit</sf-button>
+            <div class="headingContainer">
+                <a (click)="editSection(section)"><strong>{{section.heading}}</strong></a> - ({{section.items.length}}) Items
+                <div class="float-right">
+                    <sf-button icon="pencil" title="Edit" look="circle small" (click)="editSection(section)">Edit</sf-button>
+                    <sf-button icon="remove" title="Delete"look="circle small" (click)="deleteSection(section)">Delete</sf-button>   
+                </div>
         </div>
     </div>
+    Add Section
     <sf-button icon="plus" title="Add Section" (click)="addSection()">Add Section</sf-button>
 </div>
 <ng-template #elseBlock>

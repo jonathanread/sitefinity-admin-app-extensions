@@ -1,2 +1,8 @@
-.headingContainer{border-bottom: solid 1px gray;}
-.section{border-bottom:solid 1px black;}
+.headingContainer{border-bottom: solid 1px #e4e4e4;padding:5px;}
+.section{border-bottom:solid 1px #e4e4e4;}
+.float-right{float:right;}
+.headingContainer:after {
+    content: "";
+    clear: both;
+    display: table;
+  }
